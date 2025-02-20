@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/primary_color"/> <!-- 按下时的背景颜色 -->
+            <corners android:radius="8dp"/> <!-- 圆角半径 -->
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="@color/primary_color"/> <!-- 聚焦时的背景颜色 -->
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/primary_color"/> <!-- 默认背景颜色 -->
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+</selector>
