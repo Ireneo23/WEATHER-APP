@@ -3,9 +3,11 @@ package com.example.weatherapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextCity;
     private Button buttonFetch;
     private TextView textViewTemp, textViewStatus, textViewHumidity, textViewDate;
+    private ImageView imageViewWeather;
     private final String API_KEY = "6c717a9d88a04dacb76133844251902"; // Replace with your actual API key
 
     @Override
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewHumidity = findViewById(R.id.textViewHumidity);
         textViewDate = findViewById(R.id.textViewDate);
+        imageViewWeather = findViewById(R.id.imageViewWeather); // Add this line
 
         buttonFetch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,13 +74,15 @@ public class MainActivity extends AppCompatActivity {
                             int humidity = current.getInt("humidity");
                             String conditionText = current.getJSONObject("condition").getString("text");
 
-                            String weatherStatus = mapWeatherStatus(conditionText);
+                            Pair<Integer, String> weatherStatusPair = mapWeatherStatus(conditionText);
                             String currentDate = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault()).format(new Date());
 
                             textViewTemp.setText(tempC + "°C");
-                            textViewStatus.setText(weatherStatus);
+                            textViewStatus.setText(weatherStatusPair.second);
                             textViewHumidity.setText(humidity + "%");
                             textViewDate.setText(currentDate);
+
+                            imageViewWeather.setImageResource(weatherStatusPair.first); // Set the image resource
 
                         } catch (JSONException e) {
                             Toast.makeText(MainActivity.this, "Error parsing weather data", Toast.LENGTH_SHORT).show();
@@ -92,13 +98,17 @@ public class MainActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-    private String mapWeatherStatus(String condition) {
+    private Pair<Integer, String> mapWeatherStatus(String condition) {
         condition = condition.toLowerCase();
-        if (condition.contains("sun")) return "Sunny";
-        if (condition.contains("rain")) return "Rainy";
-        if (condition.contains("cloud")) return "Cloudy";
-        if (condition.contains("wind")) return "Windy";
-        if (condition.contains("storm")) return "Stormy";
-        return condition.substring(0, 1).toUpperCase() + condition.substring(1); // Default
+        if (condition.contains("sun")) return new Pair<>(R.drawable.weatherapp, "Sunny");
+        if (condition.contains("rain")) return new Pair<>(R.drawable.rainyday, "Rainy");
+        if (condition.contains("cloud")) return new Pair<>(R.drawable.clouds, "Cloudy");
+        if (condition.contains("wind")) return new Pair<>(R.drawable.windy, "Windy");
+        if (condition.contains("storm")) return new Pair<>(R.drawable.stormy, "Stormy");
+        return new Pair<>(R.drawable.clouddefault, capitalizeFirstLetter(condition)); // Default
+    }
+
+    private String capitalizeFirstLetter(String condition) {
+        return condition.substring(0, 1).toUpperCase() + condition.substring(1);
     }
 }
