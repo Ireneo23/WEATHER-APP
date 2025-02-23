@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonFetch;
     private TextView textViewTemp, textViewStatus, textViewHumidity, textViewDate;
     private ImageView imageViewWeather;
-    private final String API_KEY = "6c717a9d88a04dacb76133844251902"; // Replace with your actual API key
+    private final String API_KEY = BuildConfig.API_KEY; // Replace with your actual API key
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
